@@ -5,18 +5,68 @@
  */
 package recuperacionpracticas;
 
-import javax.swing.JLabel;
+import javax.swing.JButton;
+import static recuperacionpracticas.imagenes.imagenesCartas;
+import static recuperacionpracticas.imagenes.parteTrasera;
 
 /**
  *
  * @author mst-m
  */
-public class carta extends JLabel{
-    private boolean descubierta; private int codigo;
+public class carta extends JButton{
+    private boolean descubierta; private int codigoCarta;
     
     public carta(){
         super();
-        descubierta = this.descubierta;
-        codigo = this.codigo;
+        descubierta = false;
+        codigoCarta = this.codigoCarta;
+        if(descubierta == false){
+            ocultarImagen();
+        }
+        else{
+            mostrarImagen();
+        }
+    }
+    
+    public carta(int codigoCarta){
+        super();
+        descubierta = false;
+        this.codigoCarta = codigoCarta;
+        if(descubierta == false){
+            ocultarImagen();
+        }
+        else{
+            mostrarImagen();
+        }
+    }
+    
+    public void mostrarImagen(){
+            this.setIcon(imagenesCartas[codigoCarta]);
+            descubierta = true;
+    }
+    
+    public void ocultarImagen(){
+        this.setIcon(parteTrasera);
+        descubierta = false;
+    }
+
+    public boolean isDescubierta() {
+        return descubierta;
+    }
+
+    public int getCodigoCarta() {
+        return codigoCarta;
+    }
+
+    public void setDescubierta(boolean descubierta) {
+        this.descubierta = descubierta;
+    }
+
+    public void setCodigoCarta(int codigoCarta) {
+        this.codigoCarta = codigoCarta;
+    }
+    
+    public boolean sonIguales(carta carta){
+        return carta.getCodigoCarta() == this.codigoCarta;
     }
 }

@@ -4,12 +4,15 @@
  * and open the template in the editor.
  */
 package recuperacionpracticas;
-
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.util.HashMap;
+import java.util.Random;
 /**
  *
  * @author mst-m
  */
-public class ventanaInicial extends javax.swing.JFrame {
+public class ventanaInicial extends javax.swing.JFrame implements ActionListener {
 
     /**
      * Creates new form NewJFrame
@@ -81,21 +84,77 @@ public class ventanaInicial extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    public void actionPerformed (ActionEvent e){
+        carta actual = (carta) e.getSource(); carta anterior = new carta(); carta[] tablero = tablero(); 
+        
+        System.out.print(actual.getCodigoCarta());
+        
+        if (actual.isDescubierta() && anterior.isDescubierta()){
+           actual.ocultarImagen();
+        }
+        else{
+            actual.mostrarImagen();
+        }
+        anterior = actual;
+        actualizarTablero(tablero);
+    }
+    
     private void jButtonStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStartActionPerformed
         iniciar();
+        this.paintAll(this.getGraphics());
     }//GEN-LAST:event_jButtonStartActionPerformed
     
     private void iniciar(){
-        int nCol = 4, nFilas = 4;
+        carta[] tablero = tablero();
+    }
+    
+    private carta[] tablero(){
+        int x = 4, y = 4;
+        this.jPanelBot.setLayout(new java.awt.GridLayout(x, y));
+        carta[] arrayCartas = crearArray();
+        for (int i = 0; i < arrayCartas.length; i++) {
+             arrayCartas[i].addActionListener(this);
+             arrayCartas[i].setVisible(true);
+             this.jPanelBot.add(arrayCartas[i]);
+        }
+        return arrayCartas;
+    }
+    
+    private void actualizarTablero(carta[] tablero){
         
-        for (int i = 0; i < nCol; i++) {
-            
-            for (int j = 0; j < nFilas; j++) {
-                
-            }
+    }
+    private static carta[] crearArray(){
+        carta listaCartas[] = new carta[16];
+        int cont = 0;
+        for(int i=0; i < listaCartas.length; i+=2){
+              listaCartas[i] = new carta(cont); 
+              listaCartas[i+1] = new carta(cont);
+              cont++;
+        }
+        
+        return listaCartas;
+    }
+    
+    private static void crearTablero(carta[] listaCartas){
+        
+    }
+    //no funciona
+    private static void desordenarArray(int[] array)
+{
+    int index;
+    Random random = new Random();
+    for (int i = array.length - 1; i > 0; i--)
+    {
+        index = random.nextInt(i + 1);
+        if (index != i)
+        {
+            array[index] ^= array[i];
+            array[i] ^= array[index];
+            array[index] ^= array[i];
         }
     }
+}
     /**
      * @param args the command line arguments
      */
