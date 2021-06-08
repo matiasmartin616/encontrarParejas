@@ -31,6 +31,7 @@ boolean puedeDescubrir = true;
     public ventanaInicial() {
         initComponents();
         this.setLocationRelativeTo(null);
+        setSize(600,400);
     }
 
     /**
@@ -53,11 +54,11 @@ boolean puedeDescubrir = true;
         jPanelBot.setLayout(jPanelBotLayout);
         jPanelBotLayout.setHorizontalGroup(
             jPanelBotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 412, Short.MAX_VALUE)
+            .addGap(0, 473, Short.MAX_VALUE)
         );
         jPanelBotLayout.setVerticalGroup(
             jPanelBotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 268, Short.MAX_VALUE)
+            .addGap(0, 267, Short.MAX_VALUE)
         );
 
         getContentPane().add(jPanelBot, java.awt.BorderLayout.CENTER);
@@ -65,7 +66,7 @@ boolean puedeDescubrir = true;
         jLabelTiempo.setText("jLabel1");
         jPanelTop.add(jLabelTiempo);
 
-        jButtonStart.setText("jButton1");
+        jButtonStart.setText("Iniciar");
         jButtonStart.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonStartActionPerformed(evt);
@@ -196,4 +197,6 @@ boolean puedeDescubrir = true;
     private javax.swing.JPanel jPanelBot;
     private javax.swing.JPanel jPanelTop;
     // End of variables declaration//GEN-END:variables
+
+    
 }
