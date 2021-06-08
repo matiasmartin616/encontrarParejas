@@ -29,6 +29,7 @@ boolean puedeDescubrir = true;
      */
     public ventanaInicial() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
