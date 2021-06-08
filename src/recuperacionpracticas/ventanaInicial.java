@@ -23,6 +23,14 @@ carta[] arrayCartas;
 carta carta1, carta2;
 Timer tiempoCarta;
 Timer cronometro;
+TimerTask tt = new TimerTask() {
+            @Override
+            public void run() {
+                segundos++;
+                jLabelTiempo.setText("Tiempo: " + segundos);
+            }
+        };
+int segundos = 0;
 boolean puedeDescubrir = true;
     /**
      * Creates new form NewJFrame
@@ -113,26 +121,22 @@ boolean puedeDescubrir = true;
         }
         
     }
-    private int cronometro(){
-        int segundos = 0;
-        
-        TimerTask tt = new TimerTask() {
-            @Override
-            public void run() {
-                segundos++;
-            }
-        };
-        
-        return segundos;
+    private void cronometro(){
+        cronometro = new Timer();
+        cronometro.scheduleAtFixedRate(tt, 0, 1000);
     }
+    
+    
     private void jButtonStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStartActionPerformed
         iniciar();
         this.paintAll(this.getGraphics());
+        
     }//GEN-LAST:event_jButtonStartActionPerformed
     
     private void iniciar(){
         jPanelBot.removeAll();
         iniciarTablero();
+        cronometro();
     }
     
     private void iniciarTablero(){
