@@ -20,24 +20,16 @@ public class carta extends JButton{
         super();
         descubierta = false;
         codigoCarta = this.codigoCarta;
-        if(descubierta == false){
-            ocultarImagen();
-        }
-        else{
-            mostrarImagen();
-        }
+        ocultarImagen();
+        
     }
     
     public carta(int codigoCarta){
         super();
         descubierta = false;
         this.codigoCarta = codigoCarta;
-        if(descubierta == false){
-            ocultarImagen();
-        }
-        else{
-            mostrarImagen();
-        }
+        ocultarImagen();
+        
     }
     
     public void mostrarImagen(){
@@ -60,6 +52,12 @@ public class carta extends JButton{
 
     public void setDescubierta(boolean descubierta) {
         this.descubierta = descubierta;
+        if(descubierta == false){
+            ocultarImagen();
+        }
+        else{
+            mostrarImagen();
+        }
     }
 
     public void setCodigoCarta(int codigoCarta) {

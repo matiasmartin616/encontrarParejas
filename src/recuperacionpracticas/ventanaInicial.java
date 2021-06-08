@@ -6,14 +6,25 @@
 package recuperacionpracticas;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.util.HashMap;
-import java.util.Random;
+import java.util.TimerTask;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Timer;
+
+
 /**
  *
  * @author mst-m
  */
-public class ventanaInicial extends javax.swing.JFrame implements ActionListener {
 
+public class ventanaInicial extends javax.swing.JFrame implements ActionListener {
+carta[] arrayCartas;
+carta carta1, carta2;
+Timer tiempoCarta;
+Date segundos;
+boolean puedeDescubrir = true;
     /**
      * Creates new form NewJFrame
      */
@@ -45,12 +56,13 @@ public class ventanaInicial extends javax.swing.JFrame implements ActionListener
         );
         jPanelBotLayout.setVerticalGroup(
             jPanelBotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 197, Short.MAX_VALUE)
+            .addGap(0, 268, Short.MAX_VALUE)
         );
 
         getContentPane().add(jPanelBot, java.awt.BorderLayout.CENTER);
 
         jLabelTiempo.setText("jLabel1");
+        jPanelTop.add(jLabelTiempo);
 
         jButtonStart.setText("jButton1");
         jButtonStart.addActionListener(new java.awt.event.ActionListener() {
@@ -58,27 +70,7 @@ public class ventanaInicial extends javax.swing.JFrame implements ActionListener
                 jButtonStartActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout jPanelTopLayout = new javax.swing.GroupLayout(jPanelTop);
-        jPanelTop.setLayout(jPanelTopLayout);
-        jPanelTopLayout.setHorizontalGroup(
-            jPanelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelTopLayout.createSequentialGroup()
-                .addGap(65, 65, 65)
-                .addComponent(jLabelTiempo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 141, Short.MAX_VALUE)
-                .addComponent(jButtonStart)
-                .addGap(94, 94, 94))
-        );
-        jPanelTopLayout.setVerticalGroup(
-            jPanelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelTopLayout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addGroup(jPanelTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelTiempo)
-                    .addComponent(jButtonStart))
-                .addContainerGap(45, Short.MAX_VALUE))
-        );
+        jPanelTop.add(jButtonStart);
 
         getContentPane().add(jPanelTop, java.awt.BorderLayout.PAGE_START);
 
@@ -86,18 +78,40 @@ public class ventanaInicial extends javax.swing.JFrame implements ActionListener
     }// </editor-fold>//GEN-END:initComponents
     
     public void actionPerformed (ActionEvent e){
-        carta actual = (carta) e.getSource(); carta anterior = new carta(); carta[] tablero = tablero(); 
         
-        System.out.print(actual.getCodigoCarta());
         
-        if (actual.isDescubierta() && anterior.isDescubierta()){
-           actual.ocultarImagen();
+        if(puedeDescubrir == true){
+            if(carta1 == null){
+                carta1 = (carta) e.getSource();
+                carta1.setDescubierta(true);
+            }  
+            else {
+                carta2 = (carta) e.getSource();
+                carta2.setDescubierta(true);
+                puedeDescubrir = false;
+                if(carta1.getCodigoCarta() == carta2.getCodigoCarta()){
+                    System.out.println("Has acertado");
+                    carta1 = carta2 = null;
+                    puedeDescubrir = true;
+                }
+                else{
+                    System.out.println("Has fallado");
+                    TimerTask tt = new TimerTask() {
+
+                        @Override
+                        public void run() {
+                            carta1.setDescubierta(false);
+                            carta2.setDescubierta(false);
+                            carta1 = carta2 = null;
+                            puedeDescubrir = true;
+                        }
+                    };
+                    tiempoCarta = new Timer();
+                    tiempoCarta.schedule(tt, 1000);
+                }   
+            }
         }
-        else{
-            actual.mostrarImagen();
-        }
-        anterior = actual;
-        actualizarTablero(tablero);
+        
     }
     
     private void jButtonStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStartActionPerformed
@@ -106,23 +120,19 @@ public class ventanaInicial extends javax.swing.JFrame implements ActionListener
     }//GEN-LAST:event_jButtonStartActionPerformed
     
     private void iniciar(){
-        carta[] tablero = tablero();
+        iniciarTablero();
     }
     
-    private carta[] tablero(){
-        int x = 4, y = 4;
+    private void iniciarTablero(){
+       int x = 4, y = 4;
         this.jPanelBot.setLayout(new java.awt.GridLayout(x, y));
-        carta[] arrayCartas = crearArray();
+        arrayCartas = crearArray();
+        arrayCartas = desordenarArray(arrayCartas);
         for (int i = 0; i < arrayCartas.length; i++) {
              arrayCartas[i].addActionListener(this);
              arrayCartas[i].setVisible(true);
              this.jPanelBot.add(arrayCartas[i]);
-        }
-        return arrayCartas;
-    }
-    
-    private void actualizarTablero(carta[] tablero){
-        
+        } 
     }
     private static carta[] crearArray(){
         carta listaCartas[] = new carta[16];
@@ -135,26 +145,14 @@ public class ventanaInicial extends javax.swing.JFrame implements ActionListener
         
         return listaCartas;
     }
-    
-    private static void crearTablero(carta[] listaCartas){
-        
-    }
+
     //no funciona
-    private static void desordenarArray(int[] array)
-{
-    int index;
-    Random random = new Random();
-    for (int i = array.length - 1; i > 0; i--)
-    {
-        index = random.nextInt(i + 1);
-        if (index != i)
-        {
-            array[index] ^= array[i];
-            array[i] ^= array[index];
-            array[index] ^= array[i];
-        }
+    private static carta[] desordenarArray(carta[] array){
+            List<carta> intList = Arrays.asList(array);
+            Collections.shuffle(intList);
+            intList.toArray(array);
+        return array;
     }
-}
     /**
      * @param args the command line arguments
      */
