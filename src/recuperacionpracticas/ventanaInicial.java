@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.util.TimerTask;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 
@@ -23,7 +22,7 @@ public class ventanaInicial extends javax.swing.JFrame implements ActionListener
 carta[] arrayCartas;
 carta carta1, carta2;
 Timer tiempoCarta;
-Date segundos;
+Timer cronometro;
 boolean puedeDescubrir = true;
     /**
      * Creates new form NewJFrame
@@ -113,18 +112,30 @@ boolean puedeDescubrir = true;
         }
         
     }
-    
+    private int cronometro(){
+        int segundos = 0;
+        
+        TimerTask tt = new TimerTask() {
+            @Override
+            public void run() {
+                segundos++;
+            }
+        };
+        
+        return segundos;
+    }
     private void jButtonStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStartActionPerformed
         iniciar();
         this.paintAll(this.getGraphics());
     }//GEN-LAST:event_jButtonStartActionPerformed
     
     private void iniciar(){
+        jPanelBot.removeAll();
         iniciarTablero();
     }
     
     private void iniciarTablero(){
-       int x = 4, y = 4;
+        int x = 4, y = 4;
         this.jPanelBot.setLayout(new java.awt.GridLayout(x, y));
         arrayCartas = crearArray();
         arrayCartas = desordenarArray(arrayCartas);
