@@ -4,13 +4,18 @@
  * and open the template in the editor.
  */
 package recuperacionpracticas;
+import BD.ConexionDB4O;
+import BD.ControladorBD4O;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.sql.SQLException;
 import java.util.TimerTask;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 
@@ -34,10 +39,17 @@ TimerTask tt = new TimerTask() {
         };
 int segundos = 0;
 boolean puedeDescubrir = true;
+Marcadores ventanaMarcadores = new Marcadores();
+TableModelPuntuacion marcadores;
     /**
      * Creates new form NewJFrame
      */
     public ventanaInicial() {
+    try {
+        marcadores  = new TableModelPuntuacion();
+    } catch (SQLException ex) {
+        Logger.getLogger(ventanaInicial.class.getName()).log(Level.SEVERE, null, ex);
+    }
         initComponents();
         this.setLocationRelativeTo(null);
         setSize(600,400);
@@ -56,8 +68,14 @@ boolean puedeDescubrir = true;
         jPanelTop = new javax.swing.JPanel();
         jLabelTiempo = new javax.swing.JLabel();
         jButtonStart = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelBotLayout = new javax.swing.GroupLayout(jPanelBot);
         jPanelBot.setLayout(jPanelBotLayout);
@@ -82,6 +100,14 @@ boolean puedeDescubrir = true;
             }
         });
         jPanelTop.add(jButtonStart);
+
+        jButton1.setText("Marcadores");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanelTop.add(jButton1);
 
         getContentPane().add(jPanelTop, java.awt.BorderLayout.PAGE_START);
 
@@ -108,8 +134,10 @@ boolean puedeDescubrir = true;
                     finJuego++;
                     
                     if (finJuego == 8){
+                        pararCrono();
                         String nombre = JOptionPane.showInputDialog("Has ganado introduce tu nombre");
                         JOptionPane.showMessageDialog(null, "Enhorabuena " + nombre + " has ganado. Tus resultados han sido almacenados en la base de datos");
+                        enviarPuntuacion(segundos, nombre);
                     }
                 }
                 
@@ -136,12 +164,26 @@ boolean puedeDescubrir = true;
         cronometro.scheduleAtFixedRate(tt, 0, 1000);
     }
     
+    private void pararCrono(){
+        cronometro.cancel();
+    }
     
     private void jButtonStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStartActionPerformed
         iniciar();
         this.paintAll(this.getGraphics());
-        
     }//GEN-LAST:event_jButtonStartActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        ventanaMarcadores.mostrar(marcadores);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+    try {
+        ControladorBD4O.getInstance().desconectar();
+    } catch (Exception ex) {
+        ex.printStackTrace();
+    }
+    }//GEN-LAST:event_formWindowClosing
     
     private void iniciar(){
         jPanelBot.removeAll();
@@ -180,10 +222,8 @@ boolean puedeDescubrir = true;
         return array;
     }
     
-    private float calcularPuntuacion(int tiempo){
-        float puntuacion = 0;
-        
-        return puntuacion;
+    private void enviarPuntuacion(int tiempo, String nombre){
+        marcadores.addPuntos(tiempo, nombre);
     }
     /**
      * @param args the command line arguments
@@ -216,12 +256,18 @@ boolean puedeDescubrir = true;
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                try {
+                    ControladorBD4O.getInstance().conectar();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
                 new ventanaInicial().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonStart;
     private javax.swing.JLabel jLabelTiempo;
     private javax.swing.JPanel jPanelBot;
