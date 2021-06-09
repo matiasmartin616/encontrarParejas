@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
+import javax.swing.JOptionPane;
 
 
 /**
@@ -23,6 +24,7 @@ carta[] arrayCartas;
 carta carta1, carta2;
 Timer tiempoCarta;
 Timer cronometro;
+int finJuego = 0;
 TimerTask tt = new TimerTask() {
             @Override
             public void run() {
@@ -97,11 +99,19 @@ boolean puedeDescubrir = true;
                 carta2 = (carta) e.getSource();
                 carta2.setDescubierta(true);
                 puedeDescubrir = false;
+                
                 if(carta1.getCodigoCarta() == carta2.getCodigoCarta()){
                     System.out.println("Has acertado");
                     carta1 = carta2 = null;
                     puedeDescubrir = true;
+                    finJuego++;
+                    
+                    if (finJuego == 8){
+                        String nombre = JOptionPane.showInputDialog("Has ganado introduce tu nombre");
+                        JOptionPane.showMessageDialog(null, "Enhorabuena " + nombre + " has ganado. Tus resultados han sido almacenados en la base de datos");
+                    }
                 }
+                
                 else{
                     System.out.println("Has fallado");
                     TimerTask tt = new TimerTask() {
@@ -118,8 +128,7 @@ boolean puedeDescubrir = true;
                     tiempoCarta.schedule(tt, 1000);
                 }   
             }
-        }
-        
+        } 
     }
     private void cronometro(){
         cronometro = new Timer();
@@ -143,7 +152,7 @@ boolean puedeDescubrir = true;
         int x = 4, y = 4;
         this.jPanelBot.setLayout(new java.awt.GridLayout(x, y));
         arrayCartas = crearArray();
-        arrayCartas = desordenarArray(arrayCartas);
+        //arrayCartas = desordenarArray(arrayCartas);
         for (int i = 0; i < arrayCartas.length; i++) {
              arrayCartas[i].addActionListener(this);
              arrayCartas[i].setVisible(true);
@@ -168,6 +177,12 @@ boolean puedeDescubrir = true;
             Collections.shuffle(intList);
             intList.toArray(array);
         return array;
+    }
+    
+    private float calcularPuntuacion(int tiempo){
+        float puntuacion = 0;
+        
+        return puntuacion;
     }
     /**
      * @param args the command line arguments
