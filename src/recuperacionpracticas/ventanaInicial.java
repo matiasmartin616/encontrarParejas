@@ -57,6 +57,8 @@ boolean puedeDescubrir = true;
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanelBot.setBackground(new java.awt.Color(255, 153, 0));
+
         javax.swing.GroupLayout jPanelBotLayout = new javax.swing.GroupLayout(jPanelBot);
         jPanelBot.setLayout(jPanelBotLayout);
         jPanelBotLayout.setHorizontalGroup(
@@ -70,7 +72,7 @@ boolean puedeDescubrir = true;
 
         getContentPane().add(jPanelBot, java.awt.BorderLayout.CENTER);
 
-        jLabelTiempo.setText("jLabel1");
+        jPanelTop.setBackground(new java.awt.Color(255, 255, 153));
         jPanelTop.add(jLabelTiempo);
 
         jButtonStart.setText("Iniciar");
