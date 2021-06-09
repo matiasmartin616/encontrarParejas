@@ -65,7 +65,7 @@ boolean puedeDescubrir = true;
         );
         jPanelBotLayout.setVerticalGroup(
             jPanelBotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 267, Short.MAX_VALUE)
+            .addGap(0, 270, Short.MAX_VALUE)
         );
 
         getContentPane().add(jPanelBot, java.awt.BorderLayout.CENTER);
