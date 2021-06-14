@@ -197,7 +197,7 @@ TableModelPuntuacion marcadores;
         int x = 4, y = 4;
         this.jPanelBot.setLayout(new java.awt.GridLayout(x, y));
         arrayCartas = crearArray();
-        //arrayCartas = desordenarArray(arrayCartas);
+        arrayCartas = desordenarArray(arrayCartas);
         for (int i = 0; i < arrayCartas.length; i++) {
              arrayCartas[i].addActionListener(this);
              arrayCartas[i].setVisible(true);
